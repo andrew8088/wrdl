@@ -28,20 +28,22 @@ export const scoreGuess = (guess: string, answer: string): WordScore => {
     const score: WordScore = [];
 
     guessLetters.forEach((letter, idx) => {
-        if (letter === answerLetters[idx]) {
-            score.push(CORRECT);
-            answerLetters[idx] = "";
-            return;
-        }
-
-        if (answerLetters.includes(letter)) {
-            score.push(ALMOST);    
-            return;
-        }
-        
-        score.push(INCORRECT);
+        if (letter !== answerLetters[idx]) return;
+        score[idx] = CORRECT;
+        answerLetters[idx] = "";
+        guessLetters[idx] = "";
     });
-
+    
+    guessLetters.forEach((letter, idx) => {
+        if (letter === "") return;
+        if (!answerLetters.includes(letter)) {
+            score[idx] = INCORRECT;
+        } else {
+            score[idx] = ALMOST;
+            const answerIdx = answerLetters.findIndex(char => char === letter);
+            answerLetters[answerIdx] = '';
+        }
+    });
     return score;
 }
 
@@ -76,7 +78,10 @@ export const isValidGuess = (guess: string, game: Game): boolean => {
     const lastScore = game.scores[game.scores.length - 1];
     if (game.hardMode && lastScore) {
         for (let i = 0; i < lastScore.length; i++) {
-            if (lastScore[i] === 'C' && guess[i] !== lastGuess[i]) {
+            if (lastScore[i] === CORRECT && guess[i] !== lastGuess[i]) {
+                return false;
+            }
+            if (lastScore[i] === ALMOST && !guess.includes(lastGuess[i])) {
                 return false;
             }
         }
