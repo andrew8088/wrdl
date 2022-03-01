@@ -68,11 +68,8 @@ export const makeGuess = (guess: string, game: Game): Game =>  {
 };
 
 export const isValidGuess = (guess: string, game: Game): boolean => {
-
     if (!game.dictionary.includes(guess)) return false;
-    
     if (game.guesses.includes(guess)) return false;
-
 
     const lastGuess = game.guesses[game.guesses.length - 1];
     const lastScore = game.scores[game.scores.length - 1];
