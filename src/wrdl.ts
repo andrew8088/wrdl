@@ -1,11 +1,13 @@
 import words from './words';
 
 type LetterScore = "I" | "A" | "C";
-type WordScore = LetterScore[];
+export type WordScore = LetterScore[];
 
 const INCORRECT: LetterScore = "I";
 const ALMOST: LetterScore = "A";
 const CORRECT: LetterScore = "C";
+
+export const MAX_LEN = 4;
 
 export type Game = {
     dictionary: string[];
@@ -47,7 +49,7 @@ export const scoreGuess = (guess: string, answer: string): WordScore => {
     return score;
 }
 
-export const createGame = (dictionary: string[], answer: string = getWord(), hardMode = false): Game => {
+export const createGame = (dictionary: string[] = words, answer: string = getWord(), hardMode = false): Game => {
     return {
         dictionary,
         answer,
@@ -59,9 +61,13 @@ export const createGame = (dictionary: string[], answer: string = getWord(), har
 }
 
 export const makeGuess = (guess: string, game: Game): Game =>  {
+    if (!isValidGuess(guess, game)) {
+        throw new Error(guess + ' is an invalid guess');
+    }
+    
     return {
         ...game,
-        guessesRemaining: game.guessesRemaining - 1,
+        guessesRemaining: game.answer === guess ? 0 : game.guessesRemaining === 0 ? 0 : game.guessesRemaining - 1,
         guesses: game.guesses.concat([guess]),
         scores: game.scores.concat([scoreGuess(guess, game.answer)])
     }
