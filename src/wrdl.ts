@@ -7,8 +7,6 @@ const INCORRECT: LetterScore = "I";
 const ALMOST: LetterScore = "A";
 const CORRECT: LetterScore = "C";
 
-export const MAX_LEN = 4;
-
 export type Game = {
     dictionary: string[];
     answer: string;
@@ -16,6 +14,7 @@ export type Game = {
     guessesRemaining: number;
     guesses: string[];
     scores: WordScore[];
+    maxWordLength: number;
 }
 
 const getRandomInt = (min: number, max: number) => 
@@ -56,7 +55,8 @@ export const createGame = (dictionary: string[] = words, answer: string = getWor
         hardMode,
         guessesRemaining: 6,
         guesses: [],
-        scores: []
+        scores: [],
+        maxWordLength: 4
     };
 }
 

@@ -17,7 +17,7 @@ const useWrdl = (): [Wrdl.Game, string] => {
         return;
       case char === 'backspace':
         return setGuess(guess.slice(0, -1));
-      case /^[a-z]$/.test(char) && guess.length < Wrdl.MAX_LEN:
+      case /^[a-z]$/.test(char) && guess.length < game.maxWordLength:
         return setGuess(guess + char);
     }
   }, [game, guess]);
